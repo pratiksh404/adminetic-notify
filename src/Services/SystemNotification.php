@@ -47,19 +47,17 @@ class SystemNotification
                 'category' => 'Info',
                 'audience' => $admin_users,
                 'channels' => config('notify.available_notification_medium_in_system', ['database', 'mail']),
-                'notify_setting' => [
-                    'allow_dismiss' => true,
-                    'newest_on_top' => true,
-                    'mouse_over' => false,
-                    'showProgressbar' => false,
-                    'spacing' => 10,
-                    'timer' => 8000,
-                    'placement_from' => 'bottom',
-                    'placement_align' => 'right',
-                    'delay' => 1000,
-                    'animate_enter' => 'bounceIn',
-                    'animate_exit' => 'rubberBand',
-                ]
+                'allow_dismiss' => true,
+                'newest_on_top' => true,
+                'mouse_over' => false,
+                'showProgressbar' => false,
+                'spacing' => 10,
+                'timer' => 8000,
+                'placement_from' => 'bottom',
+                'placement_align' => 'right',
+                'delay' => 1000,
+                'animate_enter' => 'bounceIn',
+                'animate_exit' => 'rubberBand',
             ];
             $notify->update([
                 'setting_custom' => $setting_custom
@@ -85,7 +83,18 @@ class SystemNotification
             'channels' => $data['channels'] ?? $default_setting['channels'] ?? ['database'],
             'audience' => $this->audience ?? $data['audience'] ?? $default_setting['audience'] ?? null,
             'from' => 1,
-            'category' => $this->notification_group_name
+            'category' => $this->notification_group_name,
+            'allow_dismiss' => $data['allow_dismiss'] ?? $default_setting['allow_dismiss'] ?? true,
+            'newest_on_top' => $data['newest_on_top'] ?? $default_setting['newest_on_top'] ?? true,
+            'mouse_over' => $data['mouse_over'] ?? $default_setting['mouse_over'] ?? false,
+            'showProgressbar' => $data['showProgressbar'] ?? $default_setting['showProgressbar'] ?? false,
+            'spacing' => $data['spacing'] ?? $default_setting['spacing'] ?? 10,
+            'timer' => $data['timer'] ?? $default_setting['timer'] ?? 8000,
+            'placement_from' => $data['placement_from'] ?? $default_setting['placement_from'] ?? 'bottom',
+            'placement_align' => $data['placement_align'] ?? $default_setting['placement_align'] ?? 'right',
+            'delay' => $data['delay'] ?? $default_setting['delay'] ?? 1000,
+            'animate_enter' => $data['animate_enter'] ?? $default_setting['animate_enter'] ?? 'bounceIn',
+            'animate_exit' => $data['animate_exit'] ?? $default_setting['animate_exit'] ?? 'rubberBand',
         ];
 
         $this->data = $data;

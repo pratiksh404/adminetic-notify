@@ -1,6 +1,7 @@
 <?php
 
 return [
+
     /*
     |--------------------------------------------------------------------------
     | Notification Configuration
@@ -12,7 +13,7 @@ return [
     | OPTIONS:
     | 'database','mail'
     */
-    'general_notification_mediums' => ['database'],
+    'general_notification_mediums' => ['database', 'mail'],
 
     /*
     |--------------------------------------------------------------------------
@@ -20,4 +21,13 @@ return [
     |--------------------------------------------------------------------------
     */
     'admin_notification_by_role' => ['superadmin', 'admin'],
+
+    /*
+    |--------------------------------------------------------------------------
+    | Polling Configuration
+    |--------------------------------------------------------------------------
+    | Note pusher will be turned off if polling is turned on
+    */
+    'polling' => true,
+    'polling_intervals' => 10000
 ];

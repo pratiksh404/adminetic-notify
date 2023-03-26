@@ -8,7 +8,9 @@ use Adminetic\Notify\Http\Livewire\Admin\Notify\NotificationSetting;
 use Adminetic\Notify\Services\Notify;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Blade;
 use Livewire\Livewire;
+use View;
 
 class NotifyServiceProvider extends ServiceProvider
 {
@@ -24,6 +26,8 @@ class NotifyServiceProvider extends ServiceProvider
         $this->registerResource();
         // Register View Components
         $this->registerLivewireComponents();
+        // Register Blade Directive
+        $this->bladeDirective();
     }
 
     /**
@@ -102,6 +106,16 @@ class NotifyServiceProvider extends ServiceProvider
         // Register the main class to use with the facade
         $this->app->singleton('notify', function () {
             return new Notify;
+        });
+    }
+
+    /**
+     * Register the application services.
+     */
+    public function bladeDirective()
+    {
+        Blade::directive('admineticNotification', function (string $expression) {
+            return View::make('notify::admin.layouts.assets.notification');
         });
     }
 }

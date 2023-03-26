@@ -1,7 +1,7 @@
 <div>
     @if (!is_null($notifications))
     @if ($notifications->count() > 0)
-    <li class="onhover-dropdown" style="margin-right: 25px;">
+    <li class="onhover-dropdown" style="margin-right: 25px;" {{config('notify.polling',true) ? ("wire:poll." . config("notify.polling_intervals","10000"). "ms=fetchNotifications") : ""}}>
         <div class="notification-box">
             <svg>
                 <use href="{{asset('adminetic/assets/svg/icon-sprite.svg#notification')}}"></use>
@@ -52,9 +52,48 @@
     @endif
     @endif
 
+
     @push('livewire_third_party')
     <script>
         $(function(){
+            window.addEventListener('new_notification',event => {
+                var data = event.detail;
+                var icon = data.icon != null ? data.icon : 'fa fa-bell';
+                $.notify('<i class="' + icon + ' text-'+color+'"></i><strong class="text-'+data.color+'">' + data.title + '</strong> <br> <p class="p-4">' + data.message + '</p>', {
+                 type: 'theme',
+                 allow_dismiss: data.allow_dismiss != null ? data.allow_dismiss : true,
+                 newest_on_top: data.newest_on_top != null ? data.newest_on_top : true,
+                 mouse_over: data.mouse_over != null ? data.mouse_over : false,
+                 showProgressbar:data.showProgressbar != null ? data.showProgressbar : false,
+                 spacing:data.spacing != null ? data.spacing : 10,
+                 timer:data.timer != null ? data.timer : 8000,
+                 placement:{
+                   from: String(data.placement_from),
+                   align: String(data.placement_align)
+                 },
+                 offset:{
+                   x:30,
+                   y:30
+                 },
+                 delay:data.delay != null ? data.delay : 1000 ,
+                 z_index:10000,
+                 animate:{
+                    enter:'animated ' + String(data.animate_enter),
+                    exit:'animated ' + String(data.animate_exit)
+                 }
+                 });
+            
+               // Browser Notification
+                if (window.Notification) {
+                    console.log('Notifications are supported!');
+                } else {
+                    alert('Notifications aren\'t supported on your browser! :(');
+                }
+
+                  new Notification(data.title, {
+                    body: data.message, // content for the alert
+                  });
+            })
             Livewire.on('mark_as_read_success',function(){
             $.notify({
                        title: "Alert",

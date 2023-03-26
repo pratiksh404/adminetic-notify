@@ -11,9 +11,9 @@ use Adminetic\Notify\Events\GeneralPushNotificationEvent;
 
 
 if (!function_exists('is_pusher_set')) {
-    function is_pusher_set()
+    function is_pusher_set($notify_data = null)
     {
-        return config('notify.general_notification_mediums', $default ?? array('database'));
+        return env('PUSHER_APP_ID') !== null && env('PUSHER_APP_KEY') !== null && env('PUSHER_APP_SECRET') !== null && env('PUSHER_APP_CLUSTER') !== null && (isset($notify_data['channels']) ? in_array('pusher', $notify_data['channels']) : true) && !config('notify.polling', false);
     }
 }
 // Notification Setting
@@ -32,7 +32,7 @@ if (!function_exists('notify')) {
             $notify_data = $system_notification->fetchData($data);
             try {
                 Notification::send($system_notification->audience(), new GeneralNotification($notify_data));
-                if (is_pusher_set()) {
+                if (is_pusher_set($notify_data)) {
                     event(new GeneralPushNotificationEvent($notify_data));
                 }
                 return true;

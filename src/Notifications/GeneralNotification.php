@@ -8,6 +8,7 @@ use Illuminate\Notifications\Notification;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Messages\BroadcastMessage;
+use Illuminate\Support\Arr;
 
 class GeneralNotification extends Notification
 {
@@ -162,7 +163,9 @@ class GeneralNotification extends Notification
      */
     public function via($notifiable)
     {
-        return $this->body['channels'] ?? general_notification_mediums();
+        return Arr::where($this->body['channels'] ?? general_notification_mediums(), function ($channel) {
+            return in_array($channel, general_notification_mediums());
+        });
     }
 
     /**
