@@ -2,11 +2,12 @@
 
 namespace Adminetic\Notify\Provider;
 
-use Adminetic\Notify\Http\Livewire\Admin\Notification\MyNotification;
-use Adminetic\Notify\Http\Livewire\Admin\Notification\NotificationBell;
-use Adminetic\Notify\Http\Livewire\Admin\Notification\NotificationSetting;
+use Adminetic\Notify\Http\Livewire\Admin\Notify\MyNotification;
+use Adminetic\Notify\Http\Livewire\Admin\Notify\NotificationBell;
+use Adminetic\Notify\Http\Livewire\Admin\Notify\NotificationSetting;
 use Adminetic\Notify\Services\Notify;
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Support\Facades\Route;
 use Livewire\Livewire;
 
 class NotifyServiceProvider extends ServiceProvider
@@ -60,6 +61,8 @@ class NotifyServiceProvider extends ServiceProvider
         Route::group($this->routeConfiguration(), function () {
             $this->loadRoutesFrom(__DIR__ . '/../../routes/web.php');
         });
+
+        $this->loadRoutesFrom(__DIR__ . '/../../routes/channels.php');
     }
 
     /**
@@ -74,6 +77,7 @@ class NotifyServiceProvider extends ServiceProvider
             'middleware' => config('adminetic.middleware', ['web', 'auth']),
         ];
     }
+
 
     /**
      * Register Components.
@@ -93,7 +97,7 @@ class NotifyServiceProvider extends ServiceProvider
     public function register()
     {
         // Automatically apply the package configuration
-        $this->mergeConfigFrom(__DIR__ . '/../config/notify.php', 'notify');
+        $this->mergeConfigFrom(__DIR__ . '/../../config/notify.php', 'notify');
 
         // Register the main class to use with the facade
         $this->app->singleton('notify', function () {

@@ -3,28 +3,71 @@
 namespace Adminetic\Notify\Services;
 
 use App\Models\User;
-use App\Models\Admin\Setting;
+use Pratiksh\Adminetic\Models\Admin\Setting;
+use Adminetic\Notify\Notifications\GeneralNotification;
 
 class SystemNotification
 {
-    public $notification_group_name;
     public $notification_setting_name;
+    public $notification_group_name;
     public $notification_setting;
-    public $audiance;
+    public $audience;
     public $setting;
     public $active = true;
     public $data;
 
-    public function __construct($notification_group_name, $notification_setting_name, $audiance = null)
+    public function __construct($notification_setting_name, $audience = null)
     {
-        $this->audiance = $audiance;
-        $this->notification_group_name = $notification_group_name;
-        $this->notification_setting_name = $notification_setting_name;
-        $this->setting = Setting::firstOrCreate(
+        $notify = Setting::firstOrCreate(
             ['setting_name' => 'Notification', 'setting_group' => 'Notification', 'setting_type' => 11],
-        )->setting_custom;
-        $this->notification_setting = $this->setting[$notification_group_name][$notification_setting_name] ?? null;
+        );
+        $this->audience = $audience;
+        $notification_setting_name = $notification_setting_name;
+        $this->setting = $notify->setting_custom;
+        $this->setNotificationSetting($notify, $notification_setting_name);
         $this->active = $this->notification_setting['active'] ?? true;
+    }
+
+    private function setNotificationSetting($notify, $notification_setting_name)
+    {
+        $display_name = $notification_setting_name;
+        $notification_setting_name = strtolower(str_replace([' ', '-', '!', '@', '#', '$', '%', '^', '&', '*', '(', ')', '=', '+', '//', '`', '~'], '_', $notification_setting_name));
+        if (isset($this->setting[$notification_setting_name])) {
+            $this->notification_setting = $this->setting[$notification_setting_name] ?? null;
+        } else {
+            $setting_custom = $notify->setting_custom;
+            $admin_users = adminNotificationUsers()->pluck('id')->toArray();
+            $setting_custom[$notification_setting_name] = [
+                'name' => $display_name,
+                'group' => "System",
+                'active' => true,
+                'default_severity' => GeneralNotification::HIGH,
+                'default_type' => GeneralNotification::NEWS,
+                'default_title' => 'General',
+                'category' => 'Info',
+                'audience' => $admin_users,
+                'channels' => config('notify.available_notification_medium_in_system', ['database', 'mail']),
+                'notify_setting' => [
+                    'allow_dismiss' => true,
+                    'newest_on_top' => true,
+                    'mouse_over' => false,
+                    'showProgressbar' => false,
+                    'spacing' => 10,
+                    'timer' => 8000,
+                    'placement_from' => 'bottom',
+                    'placement_align' => 'right',
+                    'delay' => 1000,
+                    'animate_enter' => 'bounceIn',
+                    'animate_exit' => 'rubberBand',
+                ]
+            ];
+            $notify->update([
+                'setting_custom' => $setting_custom
+            ]);
+            $this->setting = $notify->setting_custom;
+            $this->notification_setting = $this->setting[$notification_setting_name] ?? null;
+            $this->notification_group_name = $this->setting['group'] ?? 'System';
+        }
     }
 
     public function fetchData(array $data)
@@ -40,7 +83,7 @@ class SystemNotification
             'severity' => $data['severity'] ?? $default_setting['default_severity'],
             'icon' => $data['icon'] ?? $default_setting['default_icon'] ?? 'fa fa-bell',
             'channels' => $data['channels'] ?? $default_setting['channels'] ?? ['database'],
-            'audiance' => $this->audiance ?? $data['audiance'] ?? $default_setting['audiance'] ?? null,
+            'audience' => $this->audience ?? $data['audience'] ?? $default_setting['audience'] ?? null,
             'from' => 1,
             'category' => $this->notification_group_name
         ];
@@ -50,8 +93,8 @@ class SystemNotification
         return $data;
     }
 
-    public function audiance()
+    public function audience()
     {
-        return User::find($this->data['audiance'] ?? []);
+        return User::find($this->data['audience'] ?? []);
     }
 }

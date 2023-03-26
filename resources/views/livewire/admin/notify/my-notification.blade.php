@@ -81,13 +81,16 @@
                                         <hr>
                                     </li>
                                     @if ($notifications->count() > 0)
+                                    @if(count(array_unique(array_column($notifications->pluck('data')->toArray(),'category')))
+                                    > 0)
                                     @foreach(array_unique(array_column($notifications->pluck('data')->toArray(),'category'))
-                                    as
-                                    $category)
+                                    as $category)
                                     <li><a href="#" wire:click="getCategoryNotfications('{{$category}}')"><span
-                                                class="title"><i class="icon-bell"></i> {{$category}}
+                                                class="title"><i class="icon-bell"></i>
+                                                {{$category}}
                                             </span></a></li>
                                     @endforeach
+                                    @endif
                                     @endif
                                 </ul>
                             </div>
@@ -159,7 +162,7 @@
                                                             {{\Illuminate\Support\Str::limit($notification->data['title'],20)}}
                                                         </h6>
                                                         <small>
-                                                            ({{modeDate($notification->created_at)}})
+                                                            ({{$notification->created_at->toDateString()}})
                                                             ||
                                                             {{$notification->created_at->diffForHumans()}}
                                                         </small>
@@ -213,9 +216,9 @@
                                                     <div class="theme-form">
                                                         <div class="row">
                                                             <div class="col-12 mb-3">
-                                                                <label for="audiance">To</label>
-                                                                <select id="audiance" class="form-control"
-                                                                    style="width:100%" wire:model.defer="audiance"
+                                                                <label for="audience">To</label>
+                                                                <select id="audience" class="form-control"
+                                                                    style="width:100%" wire:model.defer="audience"
                                                                     multiple>
                                                                     @isset($users)
                                                                     @foreach ($users as $user)
@@ -226,7 +229,7 @@
                                                                     @endforeach
                                                                     @endisset
                                                                 </select>
-                                                                @error('audiance')
+                                                                @error('audience')
                                                                 <br> <span class="text-danger">{{ $message
                                                                     }}</span>
                                                                 @enderror
@@ -278,7 +281,7 @@
                                                                 <div class="media-body">
                                                                     <h6>{!! $active_notification->data['title'] !!}
                                                                         <small>
-                                                                            ({{modeDate($active_notification->created_at)}})
+                                                                            ({{$active_notification->created_at->toDateString()}})
                                                                             ||
                                                                             {{$active_notification->created_at->diffForHumans()}}
                                                                         </small>
@@ -286,7 +289,7 @@
                                                                     @if (!is_null($active_notification->read_at))
                                                                     <div class="badge badge-primary">Read
                                                                         At :
-                                                                        ({{modeDate($active_notification->read_at)}})
+                                                                        ({{$active_notification->read_at->toDateString()}})
                                                                         ||
                                                                         {{$active_notification->read_at->diffForHumans()}}
                                                                     </div>
@@ -333,14 +336,14 @@
     $(function(){
             Livewire.emit('initializeMyNotification');
                 Livewire.on('initialize_my_notfication',function(){
-                    $('#audiance').select2({
+                    $('#audience').select2({
                         placeholder: 'Select Receivers',
                         width: 'style'
                     });
     
-                    $('#audiance').on('change', function (e) {
-                       var data = $('#audiance').select2("val");
-                       @this.set('audiance', data);
+                    $('#audience').on('change', function (e) {
+                       var data = $('#audience').select2("val");
+                       @this.set('audience', data);
                     });
                 });
 

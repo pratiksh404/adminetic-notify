@@ -1,6 +1,6 @@
 <?php
 
-namespace Adminetic\Notify\Http\Livewire\Admin\Notification;
+namespace Adminetic\Notify\Http\Livewire\Admin\Notify;
 
 use Livewire\Component;
 
@@ -41,7 +41,7 @@ class NotificationBell extends Component
 
     public function render()
     {
-        return view('notifiy::livewire.admin.notify.notification-bell');
+        return view('notify::livewire.admin.notify.notification-bell');
     }
 
     private function fetchNotifications()

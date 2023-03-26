@@ -67,13 +67,13 @@ class GeneralNotification extends Notification
 
     public $is_snoozed = false;
 
-    public $alram = null;
+    public $alarm = null;
 
     public $body;
 
     public $channels;
 
-    public $audiance;
+    public $audience;
 
     // Notification Display Setting
     public  $allow_dismiss =  true;
@@ -94,7 +94,6 @@ class GeneralNotification extends Notification
      */
     public function __construct($data)
     {
-        $this->body = $data;
         $this->title = $data['title'] ?? "System Notification";
         $this->message = $data['message'] ?? "Message not found.";
         $this->action = $data['action'] ?? null;
@@ -106,9 +105,9 @@ class GeneralNotification extends Notification
         $this->from = $data['from'] ?? 1;
         $this->icon = $data['icon'] ?? 'fa fa-bell';
         $this->is_snoozed = $data['is_snoozed'] ?? false;
-        $this->alram = $data['alram'] ?? null;
+        $this->alarm = $data['alarm'] ?? null;
         $this->channels = $data['channels'] ?? null;
-        $this->audiance = $data['audiance'] ?? null;
+        $this->audience = $data['audience'] ?? null;
 
         // Notification Display Setting
         $this->allow_dismiss =  $data['allow_dismiss'] ?? true;
@@ -124,6 +123,35 @@ class GeneralNotification extends Notification
         $this->animate_exit =  $data['animate_exit'] ?? 'rubberBand';
 
         $this->subject = $data['subject'] ?? (($this->action ?? 'General') . ' Notification : ' . $this->title);
+
+        $body = [
+            'title' => $this->title,
+            'message' => $this->message,
+            'action' => $this->action,
+            'color' => $this->color,
+            'url' => $this->url,
+            'category' => $this->category,
+            'icon' => $this->icon,
+            'severity' => $this->severity,
+            'from' => $this->from,
+            'is_snoozed' => $this->is_snoozed,
+            'alarm' => $this->alarm,
+            'channels' => $this->channels,
+            'audience' => $this->audience,
+            'allow_dismiss' => $this->allow_dismiss,
+            'newest_on_top' => $this->newest_on_top,
+            'mouse_over' => $this->mouse_over,
+            'showProgressbar' => $this->showProgressbar,
+            'spacing' => $this->spacing,
+            'timer' => $this->timer,
+            'placement_from' => $this->placement_from,
+            'placement_align' => $this->placement_align,
+            'delay' => $this->delay,
+            'animate_enter' => $this->animate_enter,
+            'animate_exit' => $this->animate_exit,
+            'subject' => $this->subject,
+        ];
+        $this->body = $body;
     }
 
     /**

@@ -21,6 +21,23 @@
                                             ',$active_setting['name'] ?? ''))}}</p>
                                     </div>
                                 </div>
+                                <hr>
+                                <b>Create Setting</b> <br>
+                                <form wire:submit.prevent="createNotifySetting" method="post">
+                                    <div class="mb-3">
+                                        <label for="setting_name">Setting Name</label>
+                                        <input type="text" id="setting_name" wire:model.defer="notify_setting.name" class="form-control" placeholder="Notification Setting Name">
+                                    </div>
+                                    <br>
+                                    <div class="mb-3">
+                                        <label for="setting_group">Setting Group</label>
+                                        <input type="text" id="setting_group" wire:model.defer="notify_setting.group" class="form-control" placeholder="Notification Setting Group">
+                                    </div>
+                                    <br>
+                                    <button class="btn btn-primary btn-air-primary" type="submit" style="width:100%">Save</button>
+                                </form>
+                                <hr>
+                                @if (!is_null($settings))
                                 <ul class="nav main-menu" role="tablist">
                                     @foreach ($settings as $group_name => $group_settings)
                                     <li class="nav-item"><span class="main-title"> {{strtoupper($group_name)}}</span>
@@ -49,6 +66,7 @@
                                     <hr>
                                     @endforeach
                                 </ul>
+                                @endif
                             </div>
                         </div>
                     </div>
@@ -141,7 +159,7 @@
                                                 <div class="col-lg-3">
                                                     <label><u>Channels</u></label>
                                                     <hr>
-                                                    @foreach (config('school.available_notification_medium_in_system')
+                                                    @foreach (config('notify.available_notification_medium_in_system')
                                                     as $channel)
                                                     <input type="checkbox" wire:model="channels" value="{{$channel}}">
                                                     {{$channel}}
@@ -152,18 +170,18 @@
                                                     <div class="card">
                                                         <div class="card-body">
                                                             <button class="btn btn-primary btn-air-primary mb-3"
-                                                                wire:click="showAudiance" style="width: 100%">
+                                                                wire:click="showaudience" style="width: 100%">
                                                                 <div class="d-flex justify-content-between">
-                                                                    <b>Notfication Audiance</b>
-                                                                    <span>Total audiance
-                                                                        <b><u>{{count($audiance)}}</u></b></span>
+                                                                    <b>Notfication audience</b>
+                                                                    <span>Total audience
+                                                                        <b><u>{{count($audience ?? [])}}</u></b></span>
                                                                 </div>
                                                             </button>
                                                             <hr>
                                                             <div class="row">
                                                                 <div class="col-lg-12">
                                                                     <div wire:ignore wire:loading.flex
-                                                                        wire:target="showAudiance">
+                                                                        wire:target="showaudience">
                                                                         <div
                                                                             style="width:100%;align-items: center;justify-content: center;">
                                                                             <div class="loader-box" style="margin:auto">
@@ -173,8 +191,8 @@
                                                                     </div>
                                                                 </div>
                                                             </div>
-                                                            <div wire:loading.remove wire:target="showAudiance">
-                                                                @if ($show_audiance)
+                                                            <div wire:loading.remove wire:target="showaudience">
+                                                                @if (!is_null($show_audience) && !is_null($roles))
                                                                 <div class="row">
                                                                     <div class="col-sm-3 tabs-responsive-side">
                                                                         <div class="nav flex-column nav-pills border-tab nav-left"
@@ -192,7 +210,7 @@
                                                                             @endforeach
                                                                         </div>
                                                                     </div>
-                                                                    <div class="col-sm-9">
+                                                                    <div class="col-sm-9" wire:ignore>
                                                                         <div class="tab-content"
                                                                             id="v-pills-tabContent">
                                                                             @foreach ($roles as $role)
@@ -200,80 +218,26 @@
                                                                                 id="v-pills-role{{$role->id}}"
                                                                                 role="tabpanel"
                                                                                 aria-labelledby="v-pills-role{{$role->id}}-tab">
-                                                                                @if ($role->name != 'student')
-                                                                                <div class="row">
-                                                                                    @foreach($role->users->chunk(10)
-                                                                                    as
-                                                                                    $user_group)
 
-                                                                                    <div class="col-lg-4">
-                                                                                        @foreach($user_group->sortBy('name')
-                                                                                        as $user)
+                                                                                <div class="row">
+                                                                                    @if ($role->users->count() > 0)
+                                                                                    @foreach($role->users->chunk(10) as $user_group)
+                                                                                  @if ($user_group->count() > 0)
+                                                                                        <div class="col-lg-4">
+                                                                                        @foreach($user_group as $user)
                                                                                         <input type="checkbox"
                                                                                             value="{{$user->id}}"
-                                                                                            wire:model="audiance">
+                                                                                            wire:model="audience">
                                                                                         {{$user->name}}
                                                                                         <br>
                                                                                         @endforeach
                                                                                     </div>
                                                                                     <br>
+                                                                                  @endif
                                                                                     @endforeach
+                                                                                    @endif
                                                                                 </div>
-                                                                                @else
-                                                                                <div class="default-according"
-                                                                                    id="accordionclose">
-                                                                                    @foreach($role->users->sortBy(function($user){
-                                                                                    return
-                                                                                    $user->student->classroom->position
-                                                                                    ?? 0;
-                                                                                    })->groupBy(function($user){return
-                                                                                    $user->student->classroom->name
-                                                                                    ??
-                                                                                    'Unknown';}) as
-                                                                                    $classroom_name => $users)
-                                                                                    <div class="card">
-                                                                                        <div class="card-header"
-                                                                                            id="classroom{{$loop->index}}">
-                                                                                            <h5 class="mb-0">
-                                                                                                <button
-                                                                                                    class="btn btn-link"
-                                                                                                    data-bs-toggle="collapse"
-                                                                                                    data-bs-target="#classroom{{$loop->index}}"
-                                                                                                    aria-expanded="true"
-                                                                                                    aria-controls="classroom{{$loop->index}}">{{$classroom_name}}</button>
-                                                                                            </h5>
-                                                                                        </div>
-                                                                                        <div class="collapse"
-                                                                                            id="classroom{{$loop->index}}"
-                                                                                            aria-labelledby="classroom{{$loop->index}}"
-                                                                                            data-bs-parent="#accordionclose">
-                                                                                            <div class="card-body">
-                                                                                                <div class="row">
-                                                                                                    @foreach($users->chunk(10)
-                                                                                                    as
-                                                                                                    $user_group)
-                                                                                                    <div
-                                                                                                        class="col-lg-4">
-                                                                                                        @foreach($user_group->sortBy('name')
-                                                                                                        as
-                                                                                                        $user)
-                                                                                                        <input
-                                                                                                            type="checkbox"
-                                                                                                            value="{{$user->id}}"
-                                                                                                            wire:model="audiance">
-                                                                                                        {{$user->name}}
-                                                                                                        <br>
-                                                                                                        @endforeach
-                                                                                                    </div>
-                                                                                                    <br>
-                                                                                                    @endforeach
-                                                                                                </div>
-                                                                                            </div>
-                                                                                        </div>
-                                                                                    </div>
-                                                                                    @endforeach
-                                                                                </div>
-                                                                                @endif
+
                                                                             </div>
                                                                             @endforeach
                                                                         </div>
@@ -655,7 +619,7 @@
                             </div>
                             @else
                             <div class="alert alert-danger dark" role="alert">
-                                <p>No setting selected</p>
+                                <p class="text-light">No notification setting created yet.</p>
                             </div>
                             @endif
                         </div>

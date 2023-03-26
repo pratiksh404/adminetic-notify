@@ -1,6 +1,6 @@
 <?php
 
-namespace Adminetic\Notify\Http\Livewire\Admin\Notification;
+namespace Adminetic\Notify\Http\Livewire\Admin\Notify;
 
 use PDO;
 use Carbon\Carbon;
@@ -37,7 +37,7 @@ class MyNotification extends Component
     public $show_send_notification_panel = true;
 
     // Send Message
-    public $audiance = [];
+    public $audience = [];
     public $message;
 
     protected $listeners = ['initializeMyNotification' => 'initialize_my_notfication', 'general_push_notification' => '$refresh'];
@@ -58,7 +58,7 @@ class MyNotification extends Component
     public function send()
     {
         $this->validate([
-            'audiance' => 'required',
+            'audience' => 'required',
             'message' => 'required|max:55000'
         ]);
 
@@ -72,14 +72,14 @@ class MyNotification extends Component
             'severity' => GeneralNotification::MID,
             'icon' => 'fab fa-rocketchat',
             'channels' => ['database'],
-            'audiance' => $this->audiance,
+            'audience' => $this->audience,
             'from' => 2,
             'category' => 'Message',
             'user_id' => auth()->user()->id
         ];
 
-        $audiance = User::find($this->audiance);
-        Notification::send($audiance, new GeneralNotification($data));
+        $audience = User::find($this->audience);
+        Notification::send($audience, new GeneralNotification($data));
         event(new GeneralPushNotificationEvent($data));
 
         $this->emit('message_send_success');
@@ -117,7 +117,7 @@ class MyNotification extends Component
 
     public function render()
     {
-        return view('notifiy::livewire.admin.notify.my-notification');
+        return view('notify::livewire.admin.notify.my-notification');
     }
 
     public function getCategoryNotfications($category)
