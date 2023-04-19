@@ -93,7 +93,7 @@ class NotificationSetting extends Component
         $setting_custom = $setting->setting_custom;
         $admin_users = adminNotificationUsers()->pluck('id')->toArray();
         $setting_custom[strtolower(str_replace([' ', '-', '!', '@', '#', '$', '%', '^', '&', '*', '(', ')', '=', '+', '//', '`', '~'], '_', $this->notify_setting['name']))] = [
-            'name' => $this->notify_setting['name'],
+            'name' => str_replace(' ', '_', $this->notify_setting['name']),
             'group' => $this->notify_setting['group'],
             'active' => true,
             'default_severity' => GeneralNotification::HIGH,
@@ -101,7 +101,7 @@ class NotificationSetting extends Component
             'default_title' => 'General',
             'category' => 'News',
             'audience' => $admin_users,
-            'channels' => config('notify.available_notification_medium_in_system', ['database', 'mail']),
+            'channels' => config('notify.available_notification_medium_in_system', ['database', 'mail', 'pusher']),
             'notify_setting' => $this->default_notify_setting,
         ];
 

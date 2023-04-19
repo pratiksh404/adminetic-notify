@@ -58,7 +58,7 @@ class GeneralNotification extends Notification
 
     public $type;
 
-    public $category;
+    public $group;
 
     public $severity;
 
@@ -100,7 +100,7 @@ class GeneralNotification extends Notification
         $this->action = $data['action'] ?? null;
         $this->color = $data['color'] ?? 'primary';
         $this->url = $data['url'] ?? null;
-        $this->category = $data['category'] ?? 'General';
+        $this->group = $data['group'] ?? 'General';
         $this->type = $data['type'] ?? 1;
         $this->severity = $data['severity'] ?? 1;
         $this->from = $data['from'] ?? 1;
@@ -131,7 +131,7 @@ class GeneralNotification extends Notification
             'action' => $this->action,
             'color' => $this->color,
             'url' => $this->url,
-            'category' => $this->category,
+            'group' => $this->group,
             'icon' => $this->icon,
             'severity' => $this->severity,
             'from' => $this->from,
