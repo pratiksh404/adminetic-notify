@@ -2,7 +2,6 @@
 
 use Illuminate\Support\Facades\Broadcast;
 
-
 Broadcast::channel('push_notification', function () {
     return true;
 });

@@ -2,15 +2,14 @@
 
 namespace Adminetic\Notify\Http\Livewire\Admin\Notify;
 
+use Adminetic\Notify\Notifications\GeneralNotification;
+use Illuminate\Support\Arr;
 use Livewire\Component;
 use Pratiksh\Adminetic\Models\Admin\Role;
 use Pratiksh\Adminetic\Models\Admin\Setting;
-use Adminetic\Notify\Notifications\GeneralNotification;
-use Illuminate\Support\Arr;
 
 class NotificationSetting extends Component
 {
-
     public $roles;
 
     public $settings;
@@ -28,17 +27,17 @@ class NotificationSetting extends Component
     public $channels = [];
 
     // Notification Display Setting
-    public  $allow_dismiss =  true;
-    public  $newest_on_top =  true;
-    public  $mouse_over =  false;
-    public  $showProgressbar =  false;
-    public  $spacing =  10;
-    public  $timer =  8000;
-    public  $placement_from =  'bottom';
-    public  $placement_align =  'right';
-    public  $delay =  1000;
-    public  $animate_enter =  'bounceIn';
-    public  $animate_exit =  'rubberBand';
+    public $allow_dismiss = true;
+    public $newest_on_top = true;
+    public $mouse_over = false;
+    public $showProgressbar = false;
+    public $spacing = 10;
+    public $timer = 8000;
+    public $placement_from = 'bottom';
+    public $placement_align = 'right';
+    public $delay = 1000;
+    public $animate_enter = 'bounceIn';
+    public $animate_exit = 'rubberBand';
 
     public $show_audience = false;
 
@@ -58,7 +57,7 @@ class NotificationSetting extends Component
             ['setting_name' => 'Notification', 'setting_group' => 'Notification', 'setting_type' => 11],
         );
         $this->roles = Role::orderBy('level', 'desc')->get();
-        $settings  = count($setting->setting_custom ?? []) > 0 ? collect($setting->setting_custom)->groupBy(fn ($data) => $data['group'] ?? 'System', true)->toArray() : null;
+        $settings = count($setting->setting_custom ?? []) > 0 ? collect($setting->setting_custom)->groupBy(fn ($data) => $data['group'] ?? 'System', true)->toArray() : null;
         $this->settings = $settings;
         $this->active_setting = count($setting->setting_custom ?? []) > 0 ? Arr::first($setting->setting_custom) : null;
         $this->active_group = isset($this->active_setting['group']) ? $this->active_setting['group'] : null;
@@ -106,7 +105,7 @@ class NotificationSetting extends Component
         ];
 
         $setting->update([
-            'setting_custom' => $setting_custom
+            'setting_custom' => $setting_custom,
         ]);
 
         $this->setSettingSettingInitials();
@@ -131,34 +130,34 @@ class NotificationSetting extends Component
     {
         $setting = Setting::where('setting_name', 'Notification')->first();
         $setting_custom = $setting->setting_custom;
-        if (!is_null($setting)) {
+        if (! is_null($setting)) {
             $active_setting = $this->active_setting;
             $configuration = [
                 'name' => $active_setting['name'],
                 'group' => $active_setting['group'] ?? 'System',
                 'default_title' => $this->default_title ?? $active_setting['default_title'],
-                'active' => $this->active  ?? $active_setting['active'],
-                'default_severity' => $this->default_severity  ?? $active_setting['default_severity'],
-                'default_type' => $this->default_type  ?? $active_setting['default_type'],
-                'audience' => array_unique($this->audience  ?? $active_setting['audience'] ?? []),
-                'channels' => $this->channels  ?? $active_setting['channels'],
-                'icon' => $this->icon  ?? $active_setting['icon'] ?? 'fa fa-bell',
+                'active' => $this->active ?? $active_setting['active'],
+                'default_severity' => $this->default_severity ?? $active_setting['default_severity'],
+                'default_type' => $this->default_type ?? $active_setting['default_type'],
+                'audience' => array_unique($this->audience ?? $active_setting['audience'] ?? []),
+                'channels' => $this->channels ?? $active_setting['channels'],
+                'icon' => $this->icon ?? $active_setting['icon'] ?? 'fa fa-bell',
 
                 'allow_dismiss' =>  $this->newest_on_top ?? $active_setting['allow_dismiss'] ?? true,
                 'newest_on_top' =>  $this->newest_on_top ?? $active_setting['newest_on_top'] ?? true,
                 'mouse_over' => $this->mouse_over ?? $active_setting['mouse_over'] ?? false,
                 'showProgressbar' =>  $this->showProgressbar ?? $active_setting['showProgressbar'] ?? false,
-                'spacing' => $this->spacing ??  $active_setting['spacing'] ?? 10,
+                'spacing' => $this->spacing ?? $active_setting['spacing'] ?? 10,
                 'timer' =>  $this->timer ?? $active_setting['timer'] ?? 8000,
                 'placement_from' =>  $this->placement_from ?? $active_setting['placement_from'] ?? 'bottom',
                 'placement_align' =>  $this->placement_align ?? $active_setting['placement_align'] ?? 'right',
-                'delay' => $this->delay ??  $active_setting['delay'] ?? 1000,
-                'animate_enter' => $this->animate_enter ??  $active_setting['animate_enter'] ?? 'bounceIn',
-                'animate_exit' => $this->animate_exit ??  $active_setting['animate_exit'] ?? 'rubberBand',
+                'delay' => $this->delay ?? $active_setting['delay'] ?? 1000,
+                'animate_enter' => $this->animate_enter ?? $active_setting['animate_enter'] ?? 'bounceIn',
+                'animate_exit' => $this->animate_exit ?? $active_setting['animate_exit'] ?? 'rubberBand',
             ];
             $setting_custom[$this->active_setting_name] = $configuration;
             $setting->update([
-                'setting_custom' => $setting_custom
+                'setting_custom' => $setting_custom,
             ]);
 
             $this->emit('notification_setting_updated');
@@ -178,7 +177,7 @@ class NotificationSetting extends Component
     private function setActiveSettingValues()
     {
         $active_setting = $this->active_setting;
-        if (!is_null($active_setting)) {
+        if (! is_null($active_setting)) {
             $this->default_title = $active_setting['default_title'] ?? null;
             $this->active = $active_setting['active'] ?? null;
             $this->default_severity = $active_setting['default_severity'] ?? null;
@@ -187,17 +186,17 @@ class NotificationSetting extends Component
             $this->channels = $active_setting['channels'] ?? null;
 
             // Notification Display Setting
-            $this->allow_dismiss =  $active_setting['allow_dismiss'] ?? true;
-            $this->newest_on_top =  $active_setting['newest_on_top'] ?? true;
-            $this->mouse_over =  $active_setting['mouse_over'] ?? false;
-            $this->showProgressbar =  $active_setting['showProgressbar'] ?? false;
-            $this->spacing =  $active_setting['spacing'] ?? 10;
-            $this->timer =  $active_setting['timer'] ?? 8000;
-            $this->placement_from =  $active_setting['placement_from'] ?? 'bottom';
-            $this->placement_align =  $active_setting['placement_align'] ?? 'right';
+            $this->allow_dismiss = $active_setting['allow_dismiss'] ?? true;
+            $this->newest_on_top = $active_setting['newest_on_top'] ?? true;
+            $this->mouse_over = $active_setting['mouse_over'] ?? false;
+            $this->showProgressbar = $active_setting['showProgressbar'] ?? false;
+            $this->spacing = $active_setting['spacing'] ?? 10;
+            $this->timer = $active_setting['timer'] ?? 8000;
+            $this->placement_from = $active_setting['placement_from'] ?? 'bottom';
+            $this->placement_align = $active_setting['placement_align'] ?? 'right';
             $this->delay = $active_setting['delay'] ?? 1000;
-            $this->animate_enter =  $active_setting['animate_enter'] ?? 'bounceIn';
-            $this->animate_exit =  $active_setting['animate_exit'] ?? 'rubberBand';
+            $this->animate_enter = $active_setting['animate_enter'] ?? 'bounceIn';
+            $this->animate_exit = $active_setting['animate_exit'] ?? 'rubberBand';
         }
     }
 }

@@ -29,5 +29,5 @@ return [
     | Note pusher will be turned off if polling is turned on
     */
     'polling' => true,
-    'polling_intervals' => 10000
+    'polling_intervals' => 10000,
 ];

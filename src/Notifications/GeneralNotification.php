@@ -3,11 +3,8 @@
 namespace Adminetic\Notify\Notifications;
 
 use Illuminate\Bus\Queueable;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Notifications\Notification;
-use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
-use Illuminate\Notifications\Messages\BroadcastMessage;
+use Illuminate\Notifications\Notification;
 use Illuminate\Support\Arr;
 
 class GeneralNotification extends Notification
@@ -17,11 +14,11 @@ class GeneralNotification extends Notification
     // Constants
 
     // Actions
-    const BROWSE = "Browse";
-    const READ = "Read";
-    const EDIT = "Edit";
-    const ADD = "Add";
-    const DELETE = "Delete";
+    const BROWSE = 'Browse';
+    const READ = 'Read';
+    const EDIT = 'Edit';
+    const ADD = 'Add';
+    const DELETE = 'Delete';
 
     // Severity
     const INSIGNIFICANT = 0;
@@ -42,7 +39,6 @@ class GeneralNotification extends Notification
     const WARNING = 5;
     const NEWS = 6;
     const REPORT = 7;
-
 
     public $title;
 
@@ -77,17 +73,18 @@ class GeneralNotification extends Notification
     public $audience;
 
     // Notification Display Setting
-    public  $allow_dismiss =  true;
-    public  $newest_on_top =  true;
-    public  $mouse_over =  false;
-    public  $showProgressbar =  false;
-    public  $spacing =  10;
-    public  $timer =  8000;
-    public  $placement_from =  'bottom';
-    public  $placement_align =  'right';
-    public  $delay =  1000;
-    public  $animate_enter =  'bounceIn';
-    public  $animate_exit =  'rubberBand';
+    public $allow_dismiss = true;
+    public $newest_on_top = true;
+    public $mouse_over = false;
+    public $showProgressbar = false;
+    public $spacing = 10;
+    public $timer = 8000;
+    public $placement_from = 'bottom';
+    public $placement_align = 'right';
+    public $delay = 1000;
+    public $animate_enter = 'bounceIn';
+    public $animate_exit = 'rubberBand';
+
     /**
      * Create a new notification instance.
      *
@@ -95,8 +92,8 @@ class GeneralNotification extends Notification
      */
     public function __construct($data)
     {
-        $this->title = $data['title'] ?? "System Notification";
-        $this->message = $data['message'] ?? "Message not found.";
+        $this->title = $data['title'] ?? 'System Notification';
+        $this->message = $data['message'] ?? 'Message not found.';
         $this->action = $data['action'] ?? null;
         $this->color = $data['color'] ?? 'primary';
         $this->url = $data['url'] ?? null;
@@ -111,19 +108,19 @@ class GeneralNotification extends Notification
         $this->audience = $data['audience'] ?? null;
 
         // Notification Display Setting
-        $this->allow_dismiss =  $data['allow_dismiss'] ?? true;
-        $this->newest_on_top =  $data['newest_on_top'] ?? true;
-        $this->mouse_over =  $data['mouse_over'] ?? false;
-        $this->showProgressbar =  $data['showProgressbar'] ?? false;
-        $this->spacing =  $data['spacing'] ?? 10;
-        $this->timer =  $data['timer'] ?? 8000;
-        $this->placement_from =  $data['placement_from'] ?? 'bottom';
-        $this->placement_align =  $data['placement_align'] ?? 'right';
+        $this->allow_dismiss = $data['allow_dismiss'] ?? true;
+        $this->newest_on_top = $data['newest_on_top'] ?? true;
+        $this->mouse_over = $data['mouse_over'] ?? false;
+        $this->showProgressbar = $data['showProgressbar'] ?? false;
+        $this->spacing = $data['spacing'] ?? 10;
+        $this->timer = $data['timer'] ?? 8000;
+        $this->placement_from = $data['placement_from'] ?? 'bottom';
+        $this->placement_align = $data['placement_align'] ?? 'right';
         $this->delay = $data['delay'] ?? 1000;
-        $this->animate_enter =  $data['animate_enter'] ?? 'bounceIn';
-        $this->animate_exit =  $data['animate_exit'] ?? 'rubberBand';
+        $this->animate_enter = $data['animate_enter'] ?? 'bounceIn';
+        $this->animate_exit = $data['animate_exit'] ?? 'rubberBand';
 
-        $this->subject = $data['subject'] ?? (($this->action ?? 'General') . ' Notification : ' . $this->title);
+        $this->subject = $data['subject'] ?? (($this->action ?? 'General').' Notification : '.$this->title);
 
         $body = [
             'title' => $this->title,
@@ -180,7 +177,7 @@ class GeneralNotification extends Notification
             ->subject($this->subject)
             ->line($this->subject)
             ->line($this->message)
-            ->line('From ' . title());
+            ->line('From '.title());
     }
 
     /**
