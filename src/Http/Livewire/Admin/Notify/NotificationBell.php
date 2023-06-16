@@ -51,7 +51,7 @@ class NotificationBell extends Component
         $this->notifications_count = $notifications->count();
 
         if (config('notify.polling', true)) {
-            $poll_interval_notifications = $notifications->whereBetween('created_at', [now()->subSeconds(config("notify.polling_intervals", "10000") / 1000), now()])->get();
+            $poll_interval_notifications = $notifications->whereBetween('created_at', [now()->subSeconds(config('notify.polling_intervals', '10000') / 1000), now()])->get();
             if ($poll_interval_notifications->count() > 0) {
                 foreach ($poll_interval_notifications as $poll_interval_notification) {
                     $this->dispatchBrowserEvent('new_notification', $poll_interval_notification->data);

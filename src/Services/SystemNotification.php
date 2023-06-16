@@ -2,9 +2,9 @@
 
 namespace Adminetic\Notify\Services;
 
+use Adminetic\Notify\Notifications\GeneralNotification;
 use App\Models\User;
 use Pratiksh\Adminetic\Models\Admin\Setting;
-use Adminetic\Notify\Notifications\GeneralNotification;
 
 class SystemNotification
 {
@@ -39,7 +39,7 @@ class SystemNotification
             $admin_users = adminNotificationUsers()->pluck('id')->toArray();
             $setting_custom[$notification_setting_name] = [
                 'name' => $display_name,
-                'group' => "System",
+                'group' => 'System',
                 'active' => true,
                 'default_severity' => GeneralNotification::HIGH,
                 'default_type' => GeneralNotification::NEWS,
@@ -60,7 +60,7 @@ class SystemNotification
                 'animate_exit' => 'rubberBand',
             ];
             $notify->update([
-                'setting_custom' => $setting_custom
+                'setting_custom' => $setting_custom,
             ]);
             $this->setting = $notify->setting_custom;
             $this->notification_setting = $this->setting[$notification_setting_name] ?? null;
@@ -71,7 +71,7 @@ class SystemNotification
     public function fetchData(array $data)
     {
         $default_setting = $this->notification_setting;
-        $data =  [
+        $data = [
             'title' => $data['title'] ?? $default_setting['default_title'],
             'message' => $data['message'] ?? null,
             'subject' => $data['subject'] ?? null,

@@ -2,14 +2,13 @@
 
 namespace Adminetic\Notify\Http\Livewire\Admin\Notify;
 
-use PDO;
-use Carbon\Carbon;
+use Adminetic\Notify\Events\GeneralPushNotificationEvent;
+use Adminetic\Notify\Notifications\GeneralNotification;
 use App\Models\User;
-use Livewire\Component;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Notification;
-use Adminetic\Notify\Notifications\GeneralNotification;
-use Adminetic\Notify\Events\GeneralPushNotificationEvent;
+use Livewire\Component;
 
 class MyNotification extends Component
 {
@@ -59,13 +58,13 @@ class MyNotification extends Component
     {
         $this->validate([
             'audience' => 'required',
-            'message' => 'required|max:55000'
+            'message' => 'required|max:55000',
         ]);
 
-        $data =  [
-            'title' => "Message from " . auth()->user()->name,
+        $data = [
+            'title' => 'Message from '.auth()->user()->name,
             'message' => $this->message,
-            'subject' => "Message from " . auth()->user()->name,
+            'subject' => 'Message from '.auth()->user()->name,
             'action' => null,
             'color' => 'primary',
             'type' => GeneralNotification::MESSAGE,
@@ -75,7 +74,7 @@ class MyNotification extends Component
             'audience' => $this->audience,
             'from' => 2,
             'category' => 'Message',
-            'user_id' => auth()->user()->id
+            'user_id' => auth()->user()->id,
         ];
 
         $audience = User::find($this->audience);
@@ -98,12 +97,12 @@ class MyNotification extends Component
 
     public function show_notification($id)
     {
-        if (!is_null($id)) {
+        if (! is_null($id)) {
             $this->active_notification = $this->notifications->first(function ($n) use ($id) {
                 return $n->id == $id;
             });
             $this->active_notification->update([
-                'read_at' => Carbon::now()
+                'read_at' => Carbon::now(),
             ]);
             $this->mapNotifications();
             $this->show_send_notification_panel = false;
@@ -147,7 +146,6 @@ class MyNotification extends Component
             $this->active_notifications = $this->veryHighSeverityNotifications;
         }
     }
-
 
     private function mapNotifications()
     {

@@ -6,9 +6,9 @@ use Adminetic\Notify\Http\Livewire\Admin\Notify\MyNotification;
 use Adminetic\Notify\Http\Livewire\Admin\Notify\NotificationBell;
 use Adminetic\Notify\Http\Livewire\Admin\Notify\NotificationSetting;
 use Adminetic\Notify\Services\Notify;
-use Illuminate\Support\ServiceProvider;
-use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Blade;
+use Illuminate\Support\Facades\Route;
+use Illuminate\Support\ServiceProvider;
 use Livewire\Livewire;
 use View;
 
@@ -39,7 +39,7 @@ class NotifyServiceProvider extends ServiceProvider
     {
         // Publish Config File
         $this->publishes([
-            __DIR__ . '/../../config/notify.php' => config_path('notify.php'),
+            __DIR__.'/../../config/notify.php' => config_path('notify.php'),
         ], 'notify-config');
     }
 
@@ -50,10 +50,9 @@ class NotifyServiceProvider extends ServiceProvider
      */
     protected function registerResource()
     {
-        $this->loadViewsFrom(__DIR__ . '/../../resources/views', 'notify'); // Loading Views Files
+        $this->loadViewsFrom(__DIR__.'/../../resources/views', 'notify'); // Loading Views Files
         $this->registerRoutes();
     }
-
 
     /**
      * Register Routes.
@@ -63,10 +62,10 @@ class NotifyServiceProvider extends ServiceProvider
     protected function registerRoutes()
     {
         Route::group($this->routeConfiguration(), function () {
-            $this->loadRoutesFrom(__DIR__ . '/../../routes/web.php');
+            $this->loadRoutesFrom(__DIR__.'/../../routes/web.php');
         });
 
-        $this->loadRoutesFrom(__DIR__ . '/../../routes/channels.php');
+        $this->loadRoutesFrom(__DIR__.'/../../routes/channels.php');
     }
 
     /**
@@ -81,7 +80,6 @@ class NotifyServiceProvider extends ServiceProvider
             'middleware' => config('adminetic.middleware', ['web', 'auth']),
         ];
     }
-
 
     /**
      * Register Components.
@@ -101,7 +99,7 @@ class NotifyServiceProvider extends ServiceProvider
     public function register()
     {
         // Automatically apply the package configuration
-        $this->mergeConfigFrom(__DIR__ . '/../../config/notify.php', 'notify');
+        $this->mergeConfigFrom(__DIR__.'/../../config/notify.php', 'notify');
 
         // Register the main class to use with the facade
         $this->app->singleton('notify', function () {
