@@ -1,30 +1,60 @@
-# Very short description of the package
+# Notification Module for Adminetic Admin Panel
 
-[![Latest Version on Packagist](https://img.shields.io/packagist/v/adminetic/notification.svg?style=flat-square)](https://packagist.org/packages/adminetic/notification)
-[![Total Downloads](https://img.shields.io/packagist/dt/adminetic/notification.svg?style=flat-square)](https://packagist.org/packages/adminetic/notification)
-![GitHub Actions](https://github.com/adminetic/notification/actions/workflows/main.yml/badge.svg)
+![Adminetic Notification Module](https://github.com/pratiksh404/adminetic-notify/blob/main/screenshots/banner.jpg)
 
-This is where your description should go. Try and limit it to a paragraph or two, and maybe throw in a mention of what PSRs you support to avoid any confusion with users and contributors.
+[![Latest Version on Packagist](https://img.shields.io/packagist/v/adminetic/notify.svg?style=flat-square)](https://packagist.org/packages/adminetic/notify)
+
+[![Stars](https://img.shields.io/github/stars/pratiksh404/adminetic-notify)](https://github.com/pratiksh404/adminetic-notify/stargazers) [![Downloads](https://img.shields.io/packagist/dt/adminetic/notify.svg?style=flat-square)](https://packagist.org/packages/adminetic/notify) [![StyleCI](https://github.styleci.io/repos/385822775/shield?branch=main)](https://github.styleci.io/repos/385822775?branch=main) [![License](https://img.shields.io/github/license/pratiksh404/adminetic-notify)](//packagist.org/packages/adminetic/notify)
+
+Notification module for Adminetic Admin Panel
+
+For detailed documentaion visit [Adminetic Notification Module Documentation](https://app.gitbook.com/@pratikdai404/s/adminetic/addons/notify)
+
+#### Contains : -
+
+- Notification Setting Panel
+- My Notification Panel
+- Notification Bell
 
 ## Installation
+
+##### Step 1:
 
 You can install the package via composer:
 
 ```bash
-composer require adminetic/notification
+composer require adminetic/notify
 ```
 
-## Usage
+##### Step 2:
 
-```php
-// Usage description here
-```
-
-### Testing
+Publish database notification migration
 
 ```bash
-composer test
+php artisan notification:table
 ```
+
+##### Step 3:
+
+Migrate notification table.
+
+```bash
+php artisan migrate
+```
+
+
+## Include Adminetic Notification Adapter
+
+In config/adminetic.php, include
+
+```
+    // Adapters
+    'adapters' => [
+        Adminetic\Notify\Adapter\NotifyAdapter::class,
+    ],
+```
+
+
 
 ### Changelog
 
@@ -40,13 +70,15 @@ If you discover any security related issues, please email pratikdai404@gmail.com
 
 ## Credits
 
--   [Pratik Shrestha](https://github.com/adminetic)
--   [All Contributors](../../contributors)
+- [Pratik Shrestha](https://github.com/adminetic)
+- [All Contributors](../../contributors)
 
 ## License
 
 The MIT License (MIT). Please see [License File](LICENSE.md) for more information.
 
-## Laravel Package Boilerplate
+## Screenshots
 
-This package was generated using the [Laravel Package Boilerplate](https://laravelpackageboilerplate.com).
+![Notification Setting](https://github.com/pratiksh404/adminetic-notify/blob/main/screenshots/notification_setting.jpg)
+![My Notification](https://github.com/pratiksh404/adminetic-notify/blob/main/screenshots/my_notification.jpg)
+![Notification Bell](https://github.com/pratiksh404/adminetic-notify/blob/main/screenshots/notification_bell.jpg)
