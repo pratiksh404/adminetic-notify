@@ -47,10 +47,7 @@
         "laravel": {
             "providers": [
                 "Adminetic\\Notify\\Provider\\NotifyServiceProvider"
-            ],
-            "aliases": {
-                "Notify": "Adminetic\\Notify\\Facades\\NotifyFacade"
-            }
+            ]
         }
     }
 }

@@ -4,7 +4,7 @@
 
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/adminetic/notify.svg?style=flat-square)](https://packagist.org/packages/adminetic/notify)
 
-[![Stars](https://img.shields.io/github/stars/pratiksh404/adminetic-notify)](https://github.com/pratiksh404/adminetic-notify/stargazers) [![Downloads](https://img.shields.io/packagist/dt/adminetic/notify.svg?style=flat-square)](https://packagist.org/packages/adminetic/notify) [![StyleCI](https://github.styleci.io/repos/385822775/shield?branch=main)](https://github.styleci.io/repos/385822775?branch=main) [![License](https://img.shields.io/github/license/pratiksh404/adminetic-notify)](//packagist.org/packages/adminetic/notify)
+[![Stars](https://img.shields.io/github/stars/pratiksh404/adminetic-notify)](https://github.com/pratiksh404/adminetic-notify/stargazers) [![Downloads](https://img.shields.io/packagist/dt/adminetic/notify.svg?style=flat-square)](https://packagist.org/packages/adminetic/notify) [![StyleCI](https://github.styleci.io/repos/618407321/shield?branch=main)](https://github.styleci.io/repos/618407321?branch=main) [![License](https://img.shields.io/github/license/pratiksh404/adminetic-notify)](//packagist.org/packages/adminetic/notify)
 
 Notification module for Adminetic Admin Panel
 
@@ -40,6 +40,14 @@ Migrate notification table.
 
 ```bash
 php artisan migrate
+```
+
+##### Step 4:
+
+Migrate notification table.
+
+```bash
+php artisan vendor:publish --tag=notify-config
 ```
 
 
