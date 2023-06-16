@@ -50,6 +50,17 @@ Migrate notification table.
 php artisan vendor:publish --tag=notify-config
 ```
 
+##### Step 5:
+
+Place notification bell component to views/admin/layouts/components/header
+
+```html
+  <div class="nav-right col-8 pull-right right-header p-0">
+                @livewire('notify.notification-bell')
+                {{-- Other Codes --}}
+    </div>
+```
+
 
 ## Include Adminetic Notification Adapter
 
