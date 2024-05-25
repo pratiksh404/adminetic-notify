@@ -2,8 +2,8 @@
 
 namespace Adminetic\Notify\Notifications;
 
+use Adminetic\Notify\Mail\GeneralNotificationMail;
 use Illuminate\Bus\Queueable;
-use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 use Illuminate\Support\Arr;
 
@@ -15,29 +15,44 @@ class GeneralNotification extends Notification
 
     // Actions
     const BROWSE = 'Browse';
+
     const READ = 'Read';
+
     const EDIT = 'Edit';
+
     const ADD = 'Add';
+
     const DELETE = 'Delete';
 
     // Severity
     const INSIGNIFICANT = 0;
+
     const LOW = 1;
+
     const MID = 2;
+
     const HIGH = 3;
+
     const VERYHIGH = 4;
 
     // From
     const FROM_SYSTEM = 1;
+
     const FROM_USER = 2;
 
     // Type
     const INFO = 1;
+
     const ALERT = 2;
+
     const REMINDER = 3;
+
     const MESSAGE = 4;
+
     const WARNING = 5;
+
     const NEWS = 6;
+
     const REPORT = 7;
 
     public $title;
@@ -72,17 +87,29 @@ class GeneralNotification extends Notification
 
     public $audience;
 
+    public $attachment;
+
     // Notification Display Setting
     public $allow_dismiss = true;
+
     public $newest_on_top = true;
+
     public $mouse_over = false;
+
     public $showProgressbar = false;
+
     public $spacing = 10;
+
     public $timer = 8000;
+
     public $placement_from = 'bottom';
+
     public $placement_align = 'right';
+
     public $delay = 1000;
+
     public $animate_enter = 'bounceIn';
+
     public $animate_exit = 'rubberBand';
 
     /**
@@ -106,6 +133,7 @@ class GeneralNotification extends Notification
         $this->alarm = $data['alarm'] ?? null;
         $this->channels = $data['channels'] ?? null;
         $this->audience = $data['audience'] ?? null;
+        $this->attachment = $data['attachment'] ?? null;
 
         // Notification Display Setting
         $this->allow_dismiss = $data['allow_dismiss'] ?? true;
@@ -173,11 +201,8 @@ class GeneralNotification extends Notification
      */
     public function toMail($notifiable)
     {
-        return (new MailMessage)
-            ->subject($this->subject)
-            ->line($this->subject)
-            ->line($this->message)
-            ->line('From '.title());
+        return (new GeneralNotificationMail($notifiable->name, $notifiable->email, $this->subject, $this->message, $this->attachment))
+            ->to($notifiable->email, $notifiable->name);
     }
 
     /**

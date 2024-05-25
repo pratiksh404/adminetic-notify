@@ -9,11 +9,17 @@ use Pratiksh\Adminetic\Models\Admin\Setting;
 class SystemNotification
 {
     public $notification_setting_name;
+
     public $notification_group_name;
+
     public $notification_setting;
+
     public $audience;
+
     public $setting;
+
     public $active = true;
+
     public $data;
 
     public function __construct($notification_setting_name, $audience = null)
@@ -95,6 +101,7 @@ class SystemNotification
             'delay' => $data['delay'] ?? $default_setting['delay'] ?? 1000,
             'animate_enter' => $data['animate_enter'] ?? $default_setting['animate_enter'] ?? 'bounceIn',
             'animate_exit' => $data['animate_exit'] ?? $default_setting['animate_exit'] ?? 'rubberBand',
+            'attachment' => $data['attachment'] ?? null,
         ];
 
         $this->data = $data;
