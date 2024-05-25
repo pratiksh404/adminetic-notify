@@ -33,7 +33,7 @@ class NotifyServiceProvider extends ServiceProvider
     /**
      * Publish Package Resource.
      *
-     *@return void
+     * @return void
      */
     protected function publishResource()
     {
@@ -46,7 +46,7 @@ class NotifyServiceProvider extends ServiceProvider
     /**
      * Register Package Resource.
      *
-     *@return void
+     * @return void
      */
     protected function registerResource()
     {
@@ -84,7 +84,7 @@ class NotifyServiceProvider extends ServiceProvider
     /**
      * Register Components.
      *
-     *@return void
+     * @return void
      */
     protected function registerLivewireComponents()
     {
